@@ -2,12 +2,13 @@
 epubsum.
 
 Usage:
-  epubsum [--preamble <preamble>] [--large] <bookfile>
+  epubsum [--preamble <preamble>] [--large] [--overwrite] <bookfile>
   epubsum -h | --help
   epubsum --version
 
 Options:
   --large      Use a large model.
+  --overwrite  In directory mode, overwrite existing summaries.
   <bookfile>   The .epub file to summarize or a directory path (see below).
   <preamble>   Text to prepend to each section before summarizing. [default: '']
 
@@ -31,5 +32,6 @@ def main():
     target = arguments['<bookfile>']
     preamble = arguments['<preamble>']
     large = arguments['--large']
-    summarize(target, preamble=preamble, large=large)
+    overwrite = arguments['--overwrite']
+    summarize(target, preamble=preamble, large=large, overwrite=overwrite)
     
