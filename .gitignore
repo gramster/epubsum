@@ -3,4 +3,9 @@ dist/
 *.egg-info
 *.egg
 *.gz
+*.epub
+test.py
+.vscode
+*__pycache__
+
 
