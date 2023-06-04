@@ -21,12 +21,8 @@ def extract_sections_from_epub(epub_file_path):
     return section_texts
 
 
-def summarize_book(bookfile, preamble='', large=False, verbose=False):
-    if large:
-        summarizer = Summarizer(model_name_or_path='pszemraj/long-t5-tglobal-xl-16384-book-summary')
-    else:
-        # pszemraj/long-t5-tglobal-base-16384-book-summary
-        summarizer = Summarizer()
+def summarize_epub_file(summarizer, bookfile, preamble=''):
+    print(f'Summarizing {bookfile}\n')
     parts = []
     for i, text in enumerate(extract_sections_from_epub(bookfile)):
         parts.append(f'\n\n=====[ Section {i} ]=======================================\n\n')
@@ -34,6 +30,30 @@ def summarize_book(bookfile, preamble='', large=False, verbose=False):
 
     return ''.join(parts)
 
+
+def summarize_epub_files(summarizer, directory_path, preamble):
+    for root, dirs, files in os.walk(directory_path):
+        for file in files:
+            if file.endswith('.epub'):
+                epub_path = os.path.join(root, file)
+                summary = summarize_epub_file(epub_path, preamble)
+                summary_path = os.path.splitext(epub_path)[0] + '-summary.txt'
+                with open(summary_path, 'w') as summary_file:
+                    summary_file.write(summary)
+
+
+def summarize(target, preamble='', large=False):
+    if large:
+        summarizer = Summarizer(model_name_or_path='pszemraj/long-t5-tglobal-xl-16384-book-summary')
+    else:
+        # pszemraj/long-t5-tglobal-base-16384-book-summary
+        summarizer = Summarizer()
+
+    if os.path.isdir(target):
+        summarize_epub_files(summarizer, target, preamble)
+    else:
+        print(summarize_epub_file(summarizer, target, preamble))
+        
 
 
 
