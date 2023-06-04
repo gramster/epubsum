@@ -31,12 +31,12 @@ def summarize_epub_file(summarizer, bookfile, preamble=''):
     return ''.join(parts)
 
 
-def summarize_epub_files(summarizer, directory_path, preamble):
-    for root, dirs, files in os.walk(directory_path):
+def summarize_epub_files(summarizer, directory, preamble):
+    for root, dirs, files in os.walk(directory):
         for file in files:
             if file.endswith('.epub'):
                 epub_path = os.path.join(root, file)
-                summary = summarize_epub_file(epub_path, preamble)
+                summary = summarize_epub_file(summarizer, epub_path, preamble)
                 summary_path = os.path.splitext(epub_path)[0] + '-summary.txt'
                 with open(summary_path, 'w') as summary_file:
                     summary_file.write(summary)

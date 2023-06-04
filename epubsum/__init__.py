@@ -2,7 +2,7 @@
 epubsum.
 
 Usage:
-  epubsum [--preamble <preamble>] [--large] [--max_tokens <tokens>] <bookfile>
+  epubsum [--preamble <preamble>] [--large] <bookfile>
   epubsum -h | --help
   epubsum --version
 
@@ -23,14 +23,13 @@ with '-summary.txt'.
 __version__ = '0.2'
 
 from docopt import docopt, DocoptExit
-from .epubsum import summarize_book
+from .epubsum import summarize
 
 
 def main():
     arguments = docopt(__doc__, version=__version__)
-    bookfile = arguments['<bookfile>']
+    target = arguments['<bookfile>']
     preamble = arguments['<preamble>']
     large = arguments['--large']
-    verbose = arguments['--verbose']
-    summarize_book(bookfile, preamble=preamble, large=large, verbose=verbose)
+    summarize(target, preamble=preamble, large=large)
     
