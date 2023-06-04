@@ -1,0 +1,36 @@
+[build-system]
+requires = ["flit_core >=3.7,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "epubsum"
+authors = [{name = "Graham Wheeler", email = "graham@grahamwheeler.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+dynamic = ["version", "description"]
+dependencies = [
+    "bs4",
+    "clean-text",
+    "docopt",
+    "ebooklib",
+    "flit_core >=3.7",
+    "textsum",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+[project.urls]
+Source = "https://github.com/gramster/epubsum"
+
+[project.scripts]
+epubsum = "epubsum:main"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
