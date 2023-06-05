@@ -7,7 +7,12 @@ from textwrap import wrap
 
 
 def extract_sections_from_epub(epub_file_path):
-    book = epub.read_epub(epub_file_path)
+    try:
+        book = epub.read_epub(epub_file_path)
+    except:
+        print(f'Failed to read epub file {epub_file_path}; file may be missing or corrupted')
+        return {}
+
     section_texts = {}
 
     for item in book.get_items():
@@ -35,19 +40,19 @@ def summarize_epub_file(summarizer, bookfile, preamble=''):
     return ''.join(parts)
 
 
-def summarize_epub_files(summarizer, directory, preamble, overwrite):
+def summarize_epub_files(summarizer, directory, preamble, suffix, overwrite):
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.endswith('.epub'):
                 epub_path = os.path.join(root, file)
-                summary_path = os.path.splitext(epub_path)[0] + '-summary.txt'
+                summary_path = os.path.splitext(epub_path)[0] + suffix
                 if overwrite or not os.path.exists(summary_path):
                     summary = summarize_epub_file(summarizer, epub_path, preamble)
                     with open(summary_path, 'w') as summary_file:
                         summary_file.write(summary)
 
 
-def summarize(target, preamble='', large=False, overwrite=False):
+def summarize(target, preamble='', suffix='-summary.txt', large=False, overwrite=False):
     if large:
         summarizer = Summarizer(model_name_or_path='pszemraj/long-t5-tglobal-xl-16384-book-summary')
     else:
@@ -55,7 +60,7 @@ def summarize(target, preamble='', large=False, overwrite=False):
         summarizer = Summarizer()
 
     if os.path.isdir(target):
-        summarize_epub_files(summarizer, target, preamble, overwrite)
+        summarize_epub_files(summarizer, target, preamble, suffix, overwrite)
     else:
         print(summarize_epub_file(summarizer, target, preamble))
         
